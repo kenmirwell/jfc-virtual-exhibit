@@ -54,10 +54,16 @@ const raycaster    = new THREE.Raycaster();
 const axesHelper   = new THREE.AxesHelper(5);
 const orbit        = new OrbitControls(camera, renderer.domElement);
 const ambientLight = new THREE.AmbientLight(0xffffff);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 3)
+const dLightHelper = new THREE.DirectionalLightHelper(directionalLight, 20)
 
 scene.add(axesHelper);
 scene.add(ambientLight);
-camera.position.set(0, 2, 10);
+scene.add(directionalLight)
+scene.add(dLightHelper)
+camera.position.set(0, 3, 7);
+directionalLight.position.set(0, 10, 10)
+directionalLight.rotation.x = 1
 orbit.update();
 
 const onPointerMove = ( event ) => {
@@ -87,7 +93,7 @@ const onHover = () => {
                 // tl.to(scale, 0.2, {x: 2, y: 2, ease: Expo.easeOut})
                 // .to(scale, 1, {x: scale.x, y: scale.y, ease: Expo.easeOut, delay: 0.2});
 
-                tl.to(position, 0.2, {y: 10 * Math.abs(Math.sin(step)), ease: Expo.easeOut})
+                tl.to(position, 0.2, {y: position.y + 1 * Math.abs(Math.sin(step)), ease: Expo.easeOut})
                 .to(position, 1, {y: position.y, ease: Expo.easeOut, delay: 0.2});
 
                 setTimeout(() => {
@@ -112,6 +118,7 @@ const onHover = () => {
 
 assetLoader.load(glbmodel.href, function(gltf) {
     model3d = gltf.scene;
+    model3d.rotation.x = -0.1
     scene.add(model3d);
     window.requestAnimationFrame(animate);
 }, undefined, function(error) {
